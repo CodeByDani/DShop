@@ -8,6 +8,7 @@ namespace Catalog.API
         {
             //todo Builder 
             var builder = WebApplication.CreateBuilder(args);
+            builder.AddServiceDefaults();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddCarter();
@@ -16,6 +17,7 @@ namespace Catalog.API
 
             //todo App
             var app = builder.Build();
+            app.MapDefaultEndpoints();
             app.MapCarter();
             if (app.Environment.IsDevelopment())
             {
