@@ -1,3 +1,5 @@
+using Scalar.AspNetCore;
+
 namespace Catalog.API
 {
     public class Program
@@ -6,6 +8,8 @@ namespace Catalog.API
         {
             //todo Builder 
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
             builder.Services.AddCarter();
             builder.Services.AddMediatR(cfg =>
                 cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
@@ -13,6 +17,18 @@ namespace Catalog.API
             //todo App
             var app = builder.Build();
             app.MapCarter();
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger(options =>
+                {
+                    options.RouteTemplate = "openapi/{documentName}.json";
+                });
+                app.MapScalarApiReference(option =>
+                    option.WithTheme(ScalarTheme.DeepSpace)
+                        .WithTitle("DShopAPI")
+                        .WithForceThemeMode(ThemeMode.Dark));
+
+            }
             app.Run();
         }
     }
