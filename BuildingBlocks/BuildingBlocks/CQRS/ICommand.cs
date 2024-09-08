@@ -1,13 +1,10 @@
-﻿using MediatR;
+﻿using ErrorOr;
+using MediatR;
 
 namespace BuildingBlocks.CQRS;
 
-public interface ICommand : ICommand<Unit>
-{
-
-}
-
-public interface ICommand<out TResponse> : IRequest<TResponse>
+public interface ICommand<TResponse> : IRequest<ErrorOr<TResponse>>
+    where TResponse : notnull
 {
 
 }

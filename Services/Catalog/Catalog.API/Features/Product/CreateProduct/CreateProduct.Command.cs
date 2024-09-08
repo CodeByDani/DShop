@@ -1,6 +1,4 @@
-﻿using BuildingBlocks.CQRS;
-
-namespace Catalog.API.Features.Product.CreateProduct;
+﻿namespace Catalog.API.Features.Product.CreateProduct;
 
 public sealed partial class CreateProduct
 {
