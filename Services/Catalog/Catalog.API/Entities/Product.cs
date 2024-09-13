@@ -7,5 +7,6 @@ public sealed class Product
     public string Description { get; set; }
     public string Image { get; set; }
     public decimal Price { get; set; }
-    public List<string> Categories { get; set; }
+
+    public List<Category> Categories { get; set; }
 }
