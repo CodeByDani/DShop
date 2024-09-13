@@ -10,7 +10,7 @@ public sealed partial class CreateProduct
                 {
                     var req = request.Adapt<ReqCommand>();
                     var res = await sender.Send(req);
-                    return Results.Created($"/product/{res.Value.Id}", res);
+                    return Results.Created($"/product/{res.Value.Id}", res.Value);
                 })
                 .WithName("Create Product")
                 .Produces(StatusCodes.Status201Created)
