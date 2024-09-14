@@ -14,6 +14,11 @@ namespace Catalog.API
             builder.Services.AddCarter();
             builder.Services.AddMediatR(cfg =>
                 cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+            builder.Services.AddMarten(opt =>
+            {
+                opt.Connection(builder.Configuration.GetConnectionString("CatalogDb")!);
+                opt.Advanced.HiloSequenceDefaults.MaxLo = 1;
+            }).UseLightweightSessions();
 
             //todo App
             var app = builder.Build();
