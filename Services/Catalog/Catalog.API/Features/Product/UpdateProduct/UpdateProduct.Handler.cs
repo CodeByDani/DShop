@@ -2,9 +2,9 @@
 using Catalog.API.Features.Product.Common.Interfaces;
 using ErrorOr;
 
-namespace Catalog.API.Features.Product.CreateProduct;
+namespace Catalog.API.Features.Product.UpdateProduct;
 
-public sealed partial class CreateProduct
+public sealed partial class UpdateProduct
 {
     public sealed class CommandHandler : ICommandHandler<ReqCommand, ResCommand>
     {
@@ -17,12 +17,16 @@ public sealed partial class CreateProduct
 
         public async Task<ErrorOr<ResCommand>> Handle(ReqCommand request, CancellationToken cancellationToken)
         {
-            var product = request.Adapt<Entities.Product>();
+            var product = await _repository
+                .FirstOrDefaultAsync(p => p.Id == request.ProductId, cancellationToken);
             if (product == null)
             {
                 return Error.NotFound(nameof(ProductMessages.NotFoundProduct), ProductMessages.NotFoundProduct);
             }
-            await _repository.Store(product, cancellationToken);
+
+            product = request.Adapt(product);
+
+            await _repository.Update(product, cancellationToken);
 
             return new ResCommand { Id = product.Id };
         }

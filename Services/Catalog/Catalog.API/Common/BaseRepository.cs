@@ -40,10 +40,20 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : clas
     {
         return await _querySession.Query<TEntity>().ToListAsync(cancellationToken);
     }
+
+    public async Task<TEntity> FirstOrDefaultAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        CancellationToken cancellationToken)
+    {
+        return await _querySession.Query<TEntity>()
+            .Where(predicate)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
     public async Task<TResult> FindFirstOrDefaultAsync<TResult>(
         Expression<Func<TEntity, bool>> predicate,
         Expression<Func<TEntity, TResult>> selector,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         return await _querySession.Query<TEntity>()
             .Where(predicate)
@@ -53,7 +63,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : clas
 
     public async Task<IReadOnlyList<TEntity>> FindAsync(
         Expression<Func<TEntity, bool>> predicate,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         return await _querySession.Query<TEntity>()
             .Where(predicate)

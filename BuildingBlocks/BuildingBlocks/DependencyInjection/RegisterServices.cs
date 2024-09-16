@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Mapster;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BuildingBlocks.DependencyInjection;
 
@@ -7,6 +8,9 @@ public static class ServiceCollectionConfigurationHandler
     public static IServiceCollection RegisterServices(this IServiceCollection services)
     {
         var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+        TypeAdapterConfig.GlobalSettings.Scan(assemblies);
+
         services.Scan(selector =>
             selector.FromAssemblies(assemblies)
                 .AddClasses(filter => filter.AssignableTo<IScopeLifetime>())

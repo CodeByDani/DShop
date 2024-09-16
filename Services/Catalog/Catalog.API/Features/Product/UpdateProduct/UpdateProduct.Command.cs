@@ -1,8 +1,10 @@
-﻿namespace Catalog.API.Features.Product.CreateProduct;
-public sealed partial class CreateProduct
+﻿namespace Catalog.API.Features.Product.UpdateProduct;
+
+public sealed partial class UpdateProduct
 {
-    public sealed class CreateEndPointRequest
+    public sealed class ReqCommand : ICommand<ResCommand>
     {
+        public long ProductId { get; set; }
         public string Name { get; set; }
         public List<string> Categories { get; set; }
         public string ImageFile { get; set; }
@@ -10,7 +12,7 @@ public sealed partial class CreateProduct
         public string Description { get; set; }
     }
 
-    public sealed class CreateEndPointResponse
+    public sealed class ResCommand
     {
         public long Id { get; set; }
     }

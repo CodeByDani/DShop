@@ -12,6 +12,9 @@ public interface IRepository<TEntity> where TEntity : class
     Task<IReadOnlyList<TEntity>> GetAll(CancellationToken cancellationToken = default);
     Task<IReadOnlyList<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate,
         CancellationToken cancellationToken = default);
+    Task<TEntity> FirstOrDefaultAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        CancellationToken cancellationToken = default);
     Task<TResult> FindFirstOrDefaultAsync<TResult>(
         Expression<Func<TEntity, bool>> predicate,
         Expression<Func<TEntity, TResult>> selector,
