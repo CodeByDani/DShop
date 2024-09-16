@@ -25,11 +25,14 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : clas
         _documentSession.Update(entity);
         await _documentSession.SaveChangesAsync(cancellationToken);
     }
-
-
     public async Task Delete(TEntity entity, CancellationToken cancellationToken)
     {
         _documentSession.Delete(entity);
+        await _documentSession.SaveChangesAsync(cancellationToken);
+    }
+    public async Task DeleteById(object id, CancellationToken cancellationToken)
+    {
+        _documentSession.Delete(id);
         await _documentSession.SaveChangesAsync(cancellationToken);
     }
 
@@ -63,7 +66,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : clas
         await _documentSession.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<(IReadOnlyList<TResult>,int TotalCount)> FindWithPagination<TResult>(Expression<Func<TEntity, bool>> predicate,
+    public async Task<(IReadOnlyList<TResult>, int TotalCount)> FindWithPagination<TResult>(Expression<Func<TEntity, bool>> predicate,
         int pageIndex,
         int pageSize,
         Expression<Func<TEntity, TResult>> selector,
