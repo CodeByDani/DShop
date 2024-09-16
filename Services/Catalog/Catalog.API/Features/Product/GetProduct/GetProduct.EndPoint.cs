@@ -9,19 +9,19 @@ public sealed partial class GetProduct
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("/product/{id}", async ([FromRoute] long id, ISender sender) =>
+            app.MapGet("/product/{id}", async ([FromRoute] long id, ISender sender) =>
                 {
-                    var resCommand = await sender.Send(new ReqCommand { Id = id });
-                    if (resCommand.IsError)
+                    var resQuery = await sender.Send(new ReqQuery { Id = id });
+                    if (resQuery.IsError)
                     {
-                        return Results.BadRequest(resCommand.Errors);
+                        return Results.BadRequest(resQuery.Errors);
                     }
 
-                    var result = resCommand.Adapt<GetEndPointResponse>();
+                    var result = resQuery.Adapt<GetEndPointResponse>();
                     return Results.Ok(result);
                 })
                 .WithName("Get Product")
-                .Produces(StatusCodes.Status204NoContent)
+                .Produces(StatusCodes.Status200OK, typeof(GetEndPointResponse))
                 .ProducesProblem(StatusCodes.Status400BadRequest)
                 .WithSummary("Get Product For DShop")
                 .WithDescription("For Getting Product Should Use This API!");

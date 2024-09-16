@@ -11,7 +11,7 @@ namespace Catalog.API
             var builder = WebApplication.CreateBuilder(args);
             builder.AddServiceDefaults();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c => c.SchemaFilter<EnumSchemaFilter>());
             builder.Services.AddCarter();
             builder.Services.AddMediatR(cfg =>
                 cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));

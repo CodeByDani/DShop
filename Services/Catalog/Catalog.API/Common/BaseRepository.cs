@@ -99,4 +99,21 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : clas
         return (items, count);
 
     }
+
+    public async Task<(IReadOnlyList<TResult>, int TotalCount)> GetWithPagination<TResult>(int pageIndex, int pageSize, Expression<Func<TEntity, TResult>> selector, Expression<Func<TEntity, object>> orderBy = null,
+        bool isDescending = false, CancellationToken cancellationToken = default)
+    {
+        var query = _querySession.Query<TEntity>().AsQueryable();
+        if (orderBy != null)
+        {
+            query = isDescending ? query.OrderByDescending(orderBy) : query.OrderBy(orderBy);
+        }
+
+        var items = await query
+            .Select(selector)
+            .Skip(pageIndex * pageSize).Take(pageSize).ToListAsync(cancellationToken);
+        var count = await query.CountAsync(cancellationToken);
+
+        return (items, count);
+    }
 }

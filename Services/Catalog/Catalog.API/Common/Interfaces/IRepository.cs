@@ -27,4 +27,12 @@ public interface IRepository<TEntity> where TEntity : class
         Expression<Func<TEntity, object>> orderBy = null,
         bool isDescending = false,
         CancellationToken cancellationToken = default);
+
+    Task<(IReadOnlyList<TResult>, int TotalCount)> GetWithPagination<TResult>(
+        int pageIndex,
+        int pageSize,
+        Expression<Func<TEntity, TResult>> selector,
+        Expression<Func<TEntity, object>> orderBy = null,
+        bool isDescending = false,
+        CancellationToken cancellationToken = default);
 }

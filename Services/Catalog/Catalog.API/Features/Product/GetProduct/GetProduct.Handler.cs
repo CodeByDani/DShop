@@ -6,16 +6,16 @@ namespace Catalog.API.Features.Product.GetProduct;
 
 public sealed partial class GetProduct
 {
-    public sealed class CommandHandler : ICommandHandler<ReqCommand, ResCommand>
+    public sealed class QueryHandler : IQueryHandler<ReqQuery, ResQuery>
     {
         private readonly IProductRepository _repository;
 
-        public CommandHandler(IProductRepository repository)
+        public QueryHandler(IProductRepository repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public async Task<ErrorOr<ResCommand>> Handle(ReqCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<ResQuery>> Handle(ReqQuery request, CancellationToken cancellationToken)
         {
             var product = await _repository
                 .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
@@ -24,7 +24,7 @@ public sealed partial class GetProduct
                 return Error.NotFound(nameof(ProductMessages.NotFoundProduct), ProductMessages.NotFoundProduct);
             }
 
-            return new ResCommand
+            return new ResQuery
             {
                 Categories = product.Categories,
                 Description = product.Description,

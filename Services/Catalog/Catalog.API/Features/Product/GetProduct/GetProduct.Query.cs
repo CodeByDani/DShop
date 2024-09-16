@@ -2,11 +2,11 @@
 
 public sealed partial class GetProduct
 {
-    public sealed class ReqCommand : ICommand<ResCommand>
+    public sealed class ReqQuery : IQuery<ResQuery>
     {
         public long Id { get; set; }
     }
-    public sealed class ResCommand
+    public sealed class ResQuery
     {
         public string Name { get; set; }
         public List<string> Categories { get; set; }
