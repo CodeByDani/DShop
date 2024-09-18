@@ -17,7 +17,7 @@ public sealed partial class GetAllProduct
                         return Results.BadRequest(resQuery.Errors);
                     }
 
-                    var result = resQuery.Adapt<GetAllEndPointResponse>();
+                    var result = resQuery.Value.Adapt<GetAllEndPointResponse>();
                     return Results.Ok(result);
                 })
                 .WithName("Get All Product")

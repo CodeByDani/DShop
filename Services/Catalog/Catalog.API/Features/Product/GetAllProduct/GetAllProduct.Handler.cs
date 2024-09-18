@@ -23,6 +23,7 @@ public sealed partial class GetAllProduct
                 pageSize: request.PageSize,
                 selector: p => new
                 {
+                    Id = p.Id,
                     Name = p.Name,
                     Categories = p.Categories,
                     ImageFile = p.ImageFile,

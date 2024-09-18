@@ -23,6 +23,7 @@ public sealed partial class GetAllProduct
 
     public sealed class GetAllProductsCommandRes
     {
+        public long Id { get; set; }
         public string Name { get; set; }
         public List<string> Categories { get; set; }
         public string ImageFile { get; set; }
