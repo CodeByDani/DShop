@@ -1,16 +1,21 @@
-﻿namespace Catalog.API.Features.Product.CreateProduct;
+﻿using System.ComponentModel.DataAnnotations;
+namespace Catalog.API.Features.Product.CreateProduct;
 public sealed partial class CreateProduct
 {
-    public sealed class CreateEndPointRequest
+    public sealed class CreateProductEndPointRequest
     {
+        [Required]
         public string Name { get; set; }
-        public List<string> Categories { get; set; }
+        [Required]
+        public long CategoryId { get; set; }
+        [Required]
         public string ImageFile { get; set; }
+        [Required]
         public Decimal Price { get; set; }
         public string Description { get; set; }
     }
 
-    public sealed class CreateEndPointResponse
+    public sealed class CreateProductEndPointResponse
     {
         public long Id { get; set; }
     }

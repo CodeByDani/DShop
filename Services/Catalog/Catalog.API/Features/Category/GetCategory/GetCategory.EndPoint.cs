@@ -9,7 +9,7 @@ public sealed partial class GetCategory
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("/category/{id}", async ([FromRoute] long id, ISender sender) =>
+            app.MapGet("/category/{id:long}", async ([FromRoute] long id, ISender sender) =>
                 {
                     var resQuery = await sender.Send(new ReqQuery { Id = id });
                     if (resQuery.IsError)
@@ -17,12 +17,12 @@ public sealed partial class GetCategory
                         return Results.BadRequest((object)resQuery.Errors);
                     }
 
-                    var result = resQuery.Value.Adapt<GetEndPointResponse>();
+                    var result = resQuery.Value.Adapt<GetCategoryEndPointResponse>();
                     return Results.Ok((object)result);
                 })
                 .WithName("Get Category")
                 .WithTags("Category")
-                .Produces(StatusCodes.Status200OK, typeof(GetEndPointResponse))
+                .Produces(StatusCodes.Status200OK, typeof(GetCategoryEndPointResponse))
                 .ProducesProblem(StatusCodes.Status400BadRequest)
                 .WithSummary("Get Category For DShop")
                 .WithDescription("For Getting Category Should Use This API!");

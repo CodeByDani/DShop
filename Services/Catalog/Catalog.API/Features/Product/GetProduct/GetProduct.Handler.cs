@@ -25,7 +25,7 @@ public sealed partial class GetProduct
 
             return new ResQuery
             {
-                Categories = product.Categories,
+                Category = product.Category.Adapt<CategoryModelCommandRes>(),
                 Description = product.Description,
                 ImageFile = product.ImageFile,
                 Name = product.Name,

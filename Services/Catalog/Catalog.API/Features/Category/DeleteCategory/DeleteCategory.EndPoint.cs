@@ -10,7 +10,7 @@ public sealed partial class DeleteCategory
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("/category/{id}", async ([FromRoute] long id, ISender sender) =>
+            app.MapDelete("/category/{id:long}", async ([FromRoute] long id, ISender sender) =>
                 {
                     var resCommand = await sender.Send(new ReqCommand { Id = id });
                     if (resCommand.IsError)

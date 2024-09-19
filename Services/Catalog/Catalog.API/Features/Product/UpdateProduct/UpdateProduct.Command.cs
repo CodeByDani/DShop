@@ -6,7 +6,7 @@ public sealed partial class UpdateProduct
     {
         public long ProductId { get; set; }
         public string Name { get; set; }
-        public List<string> Categories { get; set; }
+        public long CategoryId { get; set; }
         public string ImageFile { get; set; }
         public Decimal Price { get; set; }
         public string Description { get; set; }

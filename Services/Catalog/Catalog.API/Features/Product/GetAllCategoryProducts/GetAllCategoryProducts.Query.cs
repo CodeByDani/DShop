@@ -1,11 +1,12 @@
 ﻿using Catalog.API.Enums;
 
-namespace Catalog.API.Features.Product.GetAllProduct;
+namespace Catalog.API.Features.Product.GetAllCategoryProducts;
 
-public sealed partial class GetAllProduct
+public sealed partial class GetAllCategoryProducts
 {
     public sealed class ReqQuery : IQuery<ResQuery>
     {
+        public long CategoryId { get; set; }
         public SortDirection SortDirection { get; set; }
         public int PageIndex { get; set; } = 0;
         private int _pageSize;
@@ -17,24 +18,16 @@ public sealed partial class GetAllProduct
     }
     public sealed class ResQuery
     {
-        public IReadOnlyList<GetAllProductsCommandRes> Products { get; set; }
+        public IReadOnlyList<GetAllCategoryProductsCommandRes> Products { get; set; }
         public int TotalCount { get; set; }
     }
 
-    public sealed class GetAllProductsCommandRes
+    public sealed class GetAllCategoryProductsCommandRes
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public CategoryModelCommandRes Category { get; set; }
         public string ImageFile { get; set; }
         public Decimal Price { get; set; }
-        public string Description { get; set; }
-    }
-
-    public sealed class CategoryModelCommandRes
-    {
-        public long Id { get; set; }
-        public string Name { get; set; }
         public string Description { get; set; }
     }
 }

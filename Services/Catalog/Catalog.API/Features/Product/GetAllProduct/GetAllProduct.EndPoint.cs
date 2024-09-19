@@ -8,7 +8,7 @@ public sealed partial class GetAllProduct
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("/products", async ([AsParameters] GetAllEndPointRequest request, ISender sender) =>
+            app.MapGet("/products", async ([AsParameters] GetAllProductEndPointRequest request, ISender sender) =>
                 {
                     var query = request.Adapt<ReqQuery>();
                     var resQuery = await sender.Send(query);
@@ -17,12 +17,12 @@ public sealed partial class GetAllProduct
                         return Results.BadRequest(resQuery.Errors);
                     }
 
-                    var result = resQuery.Value.Adapt<GetAllEndPointResponse>();
+                    var result = resQuery.Value.Adapt<GetAllProductEndPointResponse>();
                     return Results.Ok(result);
                 })
                 .WithName("Get All Product")
                 .WithTags("Product")
-                .Produces(StatusCodes.Status200OK, typeof(GetAllEndPointResponse))
+                .Produces(StatusCodes.Status200OK, typeof(GetAllProductEndPointResponse))
                 .ProducesProblem(StatusCodes.Status400BadRequest)
                 .WithSummary("Get All Product For DShop")
                 .WithDescription("For Getting All Product Should Use This API!");

@@ -9,9 +9,15 @@ public sealed partial class GetProduct
     public sealed class ResQuery
     {
         public string Name { get; set; }
-        public List<string> Categories { get; set; }
+        public CategoryModelCommandRes Category { get; set; }
         public string ImageFile { get; set; }
         public Decimal Price { get; set; }
+        public string Description { get; set; }
+    }
+    public sealed class CategoryModelCommandRes
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
     }
 }

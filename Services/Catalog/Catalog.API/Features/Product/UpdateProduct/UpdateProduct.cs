@@ -1,17 +1,23 @@
-﻿namespace Catalog.API.Features.Product.UpdateProduct;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Catalog.API.Features.Product.UpdateProduct;
 
 public sealed partial class UpdateProduct
 {
-    public sealed class UpdateEndPointRequest
+    public sealed class UpdateProductEndPointRequest
     {
+        [Required]
         public string Name { get; set; }
-        public List<string> Categories { get; set; }
+        [Required]
+        public long CategoryId { get; set; }
+        [Required]
         public string ImageFile { get; set; }
+        [Required]
         public Decimal Price { get; set; }
         public string Description { get; set; }
     }
 
-    public sealed class UpdateEndPointResponse
+    public sealed class UpdateProductEndPointResponse
     {
         public long Id { get; set; }
     }

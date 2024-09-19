@@ -2,12 +2,19 @@
 
 public sealed partial class GetProduct
 {
-    public sealed class GetEndPointResponse
+    public sealed class GetProductEndPointResponse
     {
         public string Name { get; set; }
-        public List<string> Categories { get; set; }
+        public ProductCategoryModelEndPointRes Category { get; set; }
         public string ImageFile { get; set; }
         public Decimal Price { get; set; }
+        public string Description { get; set; }
+    }
+
+    public sealed class ProductCategoryModelEndPointRes
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
     }
 }

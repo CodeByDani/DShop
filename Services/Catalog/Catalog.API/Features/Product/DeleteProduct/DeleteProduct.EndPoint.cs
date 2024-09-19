@@ -9,7 +9,7 @@ public sealed partial class DeleteProduct
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("/product/{id}", async ([FromRoute] long id, ISender sender) =>
+            app.MapDelete("/product/{id:long}", async ([FromRoute] long id, ISender sender) =>
                 {
                     var resCommand = await sender.Send(new ReqCommand { Id = id });
                     if (resCommand.IsError)

@@ -8,7 +8,7 @@ public sealed partial class CreateProduct
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("/product", async (CreateEndPointRequest request, ISender sender) =>
+            app.MapPost("/product", async (CreateProductEndPointRequest request, ISender sender) =>
                 {
                     var req = request.Adapt<ReqCommand>();
                     var resCommand = await sender.Send(req);
@@ -16,12 +16,12 @@ public sealed partial class CreateProduct
                     {
                         return Results.BadRequest(resCommand.Errors);
                     }
-                    var res = resCommand.Value.Adapt<CreateEndPointResponse>();
+                    var res = resCommand.Value.Adapt<CreateProductEndPointResponse>();
                     return Results.Created($"/product/{res.Id}", res);
                 })
                 .WithName("Create Product")
                 .WithTags("Product")
-                .Produces(StatusCodes.Status201Created, typeof(CreateEndPointResponse))
+                .Produces(StatusCodes.Status201Created, typeof(CreateProductEndPointResponse))
                 .ProducesProblem(StatusCodes.Status400BadRequest)
                 .WithSummary("Create Product For DShop")
                 .WithDescription("For Creating Product Should Use This API!");

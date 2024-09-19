@@ -8,8 +8,8 @@ public sealed partial class UpdateProduct
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPut("/product/{id}", async ([FromRoute] long id
-                    , [FromBody] UpdateEndPointRequest request, ISender sender) =>
+            app.MapPut("/product/{id:long}", async ([FromRoute] long id
+                    , [FromBody] UpdateProductEndPointRequest request, ISender sender) =>
                 {
                     var req = request.Adapt<ReqCommand>();
                     req.ProductId = id;
@@ -18,12 +18,12 @@ public sealed partial class UpdateProduct
                     {
                         return Results.BadRequest(resCommand.Errors);
                     }
-                    var res = resCommand.Value.Adapt<UpdateEndPointResponse>();
+                    var res = resCommand.Value.Adapt<UpdateProductEndPointResponse>();
                     return Results.Created($"/product/{res.Id}", res);
                 })
                 .WithName("Update Product")
                 .WithTags("Product")
-                .Produces(StatusCodes.Status201Created, typeof(UpdateEndPointResponse))
+                .Produces(StatusCodes.Status201Created, typeof(UpdateProductEndPointResponse))
                 .ProducesProblem(StatusCodes.Status400BadRequest)
                 .WithSummary("Update Product For DShop")
                 .WithDescription("For Updating Product Should Use This API!");

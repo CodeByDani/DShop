@@ -8,7 +8,7 @@ public sealed partial class CreateCategory
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("/category", async (CreateEndPointRequest request, ISender sender) =>
+            app.MapPost("/category", async (CreateCategoryEndPointRequest request, ISender sender) =>
                 {
                     var req = request.Adapt<ReqCommand>();
                     var resCommand = await sender.Send(req);
@@ -16,12 +16,12 @@ public sealed partial class CreateCategory
                     {
                         return Results.BadRequest((object)resCommand.Errors);
                     }
-                    var res = resCommand.Value.Adapt<CreateEndPointResponse>();
+                    var res = resCommand.Value.Adapt<CreateCategoryEndPointResponse>();
                     return Results.Created($"/category/{res.Id}", (object)res);
                 })
                 .WithName("Create Category")
                 .WithTags("Category")
-                .Produces(StatusCodes.Status201Created, typeof(CreateEndPointResponse))
+                .Produces(StatusCodes.Status201Created, typeof(CreateCategoryEndPointResponse))
                 .ProducesProblem(StatusCodes.Status400BadRequest)
                 .WithSummary("Create Category For DShop")
                 .WithDescription("For Creating Category Should Use This API!");

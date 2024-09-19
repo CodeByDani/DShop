@@ -2,7 +2,7 @@
 
 public sealed partial class GetCategory
 {
-    public sealed class GetEndPointResponse
+    public sealed class GetCategoryEndPointResponse
     {
         public string Name { get; set; }
         public string Description { get; set; }

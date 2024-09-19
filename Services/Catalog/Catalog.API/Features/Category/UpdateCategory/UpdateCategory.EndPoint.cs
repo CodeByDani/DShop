@@ -8,8 +8,8 @@ public sealed partial class UpdateCategory
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPut("/category/{id}", async ([FromRoute] long id
-                    , [FromBody] UpdateEndPointRequest request, ISender sender) =>
+            app.MapPut("/category/{id:long}", async ([FromRoute] long id
+                    , [FromBody] UpdateCategoryEndPointRequest request, ISender sender) =>
                 {
                     var req = request.Adapt<ReqCommand>();
                     req.CategoryId = id;
@@ -18,12 +18,12 @@ public sealed partial class UpdateCategory
                     {
                         return Results.BadRequest((object)resCommand.Errors);
                     }
-                    var res = resCommand.Value.Adapt<UpdateEndPointResponse>();
+                    var res = resCommand.Value.Adapt<UpdateCategoryEndPointResponse>();
                     return Results.Created($"/category/{res.Id}", (object)res);
                 })
                 .WithName("Update Category")
                 .WithTags("Category")
-                .Produces(StatusCodes.Status201Created, typeof(UpdateEndPointResponse))
+                .Produces(StatusCodes.Status201Created, typeof(UpdateCategoryEndPointResponse))
                 .ProducesProblem(StatusCodes.Status400BadRequest)
                 .WithSummary("Update Category For DShop")
                 .WithDescription("For Updating Category Should Use This API!");

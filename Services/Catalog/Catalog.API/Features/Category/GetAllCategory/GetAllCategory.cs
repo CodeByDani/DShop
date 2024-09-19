@@ -5,7 +5,7 @@ namespace Catalog.API.Features.Category.GetAllCategory;
 
 public sealed partial class GetAllCategory
 {
-    public sealed class GetAllEndPointResponse
+    public sealed class GetAllCategoryEndPointResponse
     {
         public int TotalCount { get; set; }
         public IReadOnlyList<GetAllCategoriesEndPointRes> Categories { get; set; }

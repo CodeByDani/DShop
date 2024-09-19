@@ -1,11 +1,11 @@
 ﻿using Catalog.API.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace Catalog.API.Features.Product.GetAllProduct;
+namespace Catalog.API.Features.Product.GetAllCategoryProducts;
 
-public sealed partial class GetAllProduct
+public sealed partial class GetAllCategoryProducts
 {
-    public sealed class GetAllProductEndPointRequest
+    public sealed class GetAllCategoryProductsEndPointRequest
     {
         [Required]
         public SortDirection SortDirection { get; set; }
@@ -19,26 +19,18 @@ public sealed partial class GetAllProduct
         }
     }
 
-    public sealed class GetAllProductEndPointResponse
+    public sealed class GetAllCategoryProductsEndPointResponse
     {
         public int TotalCount { get; set; }
-        public IReadOnlyList<GetAllProductsEndPointRes> Products { get; set; }
+        public IReadOnlyList<GetAllCategoryProductsEndPointRes> Products { get; set; }
     }
 
-    public sealed class GetAllProductsEndPointRes
+    public sealed class GetAllCategoryProductsEndPointRes
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public PGetAllCategoryModelEndPointRes Category { get; set; }
         public string ImageFile { get; set; }
         public Decimal Price { get; set; }
-        public string Description { get; set; }
-    }
-
-    public sealed class PGetAllCategoryModelEndPointRes
-    {
-        public long Id { get; set; }
-        public string Name { get; set; }
         public string Description { get; set; }
     }
 }

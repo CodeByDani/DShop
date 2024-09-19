@@ -1,30 +1,41 @@
 ﻿using Catalog.API.Enums;
+using Catalog.API.Features.Category.Common;
+using Catalog.API.Features.Category.Common.Interfaces;
 using Catalog.API.Features.Product.Common;
 using Catalog.API.Features.Product.Common.Interfaces;
 
-namespace Catalog.API.Features.Product.GetAllProduct;
+namespace Catalog.API.Features.Product.GetAllCategoryProducts;
 
-public sealed partial class GetAllProduct
+public sealed partial class GetAllCategoryProducts
 {
     public sealed class QueryHandler : IQueryHandler<ReqQuery, ResQuery>
     {
         private readonly IProductRepository _repository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public QueryHandler(IProductRepository repository)
+        public QueryHandler(IProductRepository repository, ICategoryRepository categoryRepository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         }
 
         public async Task<ErrorOr<ResQuery>> Handle(ReqQuery request, CancellationToken cancellationToken)
         {
-            var result = await _repository.GetWithPagination(
+            var category =
+                await _categoryRepository.FirstOrDefaultAsync(p => p.Id == request.CategoryId, cancellationToken);
+            if (category == null)
+            {
+                return Error.NotFound(nameof(CategoryMessages.NotFoundCategory), CategoryMessages.NotFoundCategory);
+            }
+
+            var result = await _repository.FindWithPagination(
+                p => p.Category.Id == request.CategoryId,
                 pageIndex: request.PageIndex,
                 pageSize: request.PageSize,
                 selector: p => new
                 {
                     Id = p.Id,
                     Name = p.Name,
-                    Category = p.Category,
                     ImageFile = p.ImageFile,
                     Price = p.Price,
                     Description = p.Description
@@ -36,7 +47,7 @@ public sealed partial class GetAllProduct
                 return Error.NotFound(nameof(ProductMessages.NotFoundProduct), ProductMessages.NotFoundProduct);
             }
 
-            var products = result.Item1.Adapt<IReadOnlyList<GetAllProductsCommandRes>>();
+            var products = result.Item1.Adapt<IReadOnlyList<GetAllCategoryProductsCommandRes>>();
             var totalCount = result.TotalCount;
             return new ResQuery
             {
