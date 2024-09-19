@@ -1,4 +1,7 @@
-﻿namespace Catalog.API.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+
+namespace Catalog.API.Entities;
 
 public class Category
 {

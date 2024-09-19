@@ -1,32 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Catalog.API.Features.Product.UpdateProduct;
+namespace Catalog.API.Features.Category.UpdateCategory;
 
-public sealed partial class UpdateProduct
+public sealed partial class UpdateCategory
 {
     public sealed class EndPoint : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPut("/product/{id}", async ([FromRoute] long id
+            app.MapPut("/category/{id}", async ([FromRoute] long id
                     , [FromBody] UpdateEndPointRequest request, ISender sender) =>
                 {
                     var req = request.Adapt<ReqCommand>();
-                    req.ProductId = id;
+                    req.CategoryId = id;
                     var resCommand = await sender.Send(req);
                     if (resCommand.IsError)
                     {
-                        return Results.BadRequest(resCommand.Errors);
+                        return Results.BadRequest((object)resCommand.Errors);
                     }
                     var res = resCommand.Value.Adapt<UpdateEndPointResponse>();
-                    return Results.Created($"/product/{res.Id}", res);
+                    return Results.Created($"/category/{res.Id}", (object)res);
                 })
-                .WithName("Update Product")
-                .WithTags("Product")
+                .WithName("Update Category")
+                .WithTags("Category")
                 .Produces(StatusCodes.Status201Created, typeof(UpdateEndPointResponse))
                 .ProducesProblem(StatusCodes.Status400BadRequest)
-                .WithSummary("Update Product For DShop")
-                .WithDescription("For Updating Product Should Use This API!");
+                .WithSummary("Update Category For DShop")
+                .WithDescription("For Updating Category Should Use This API!");
         }
     }
 }

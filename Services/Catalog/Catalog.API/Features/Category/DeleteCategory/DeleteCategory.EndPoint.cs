@@ -1,29 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Results = Microsoft.AspNetCore.Http.Results;
 
-namespace Catalog.API.Features.Product.DeleteProduct;
+namespace Catalog.API.Features.Category.DeleteCategory;
 
-public sealed partial class DeleteProduct
+
+public sealed partial class DeleteCategory
 {
     public sealed class EndPoint : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("/product/{id}", async ([FromRoute] long id, ISender sender) =>
+            app.MapDelete("/category/{id}", async ([FromRoute] long id, ISender sender) =>
                 {
                     var resCommand = await sender.Send(new ReqCommand { Id = id });
                     if (resCommand.IsError)
                     {
-                        return Results.BadRequest(resCommand.Errors);
+                        return Results.BadRequest((object)resCommand.Errors);
                     }
                     return Results.NoContent();
                 })
-                .WithName("Delete Product")
-                .WithTags("Product")
+                .WithName("Delete Category")
+                .WithTags("Category")
                 .Produces(StatusCodes.Status204NoContent)
                 .ProducesProblem(StatusCodes.Status400BadRequest)
-                .WithSummary("Delete Product For DShop")
-                .WithDescription("For Deleting Product Should Use This API!");
+                .WithSummary("Delete Category For DShop")
+                .WithDescription("For Deleting Category Should Use This API!");
         }
     }
 }

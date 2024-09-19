@@ -21,6 +21,7 @@ public sealed partial class GetAllProduct
                     return Results.Ok(result);
                 })
                 .WithName("Get All Product")
+                .WithTags("Product")
                 .Produces(StatusCodes.Status200OK, typeof(GetAllEndPointResponse))
                 .ProducesProblem(StatusCodes.Status400BadRequest)
                 .WithSummary("Get All Product For DShop")

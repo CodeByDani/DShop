@@ -1,6 +1,5 @@
 ﻿using Catalog.API.Features.Product.Common;
 using Catalog.API.Features.Product.Common.Interfaces;
-using ErrorOr;
 
 namespace Catalog.API.Features.Product.UpdateProduct;
 

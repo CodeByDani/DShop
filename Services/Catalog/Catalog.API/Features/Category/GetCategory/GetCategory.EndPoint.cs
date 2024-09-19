@@ -1,31 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Results = Microsoft.AspNetCore.Http.Results;
 
-namespace Catalog.API.Features.Product.GetProduct;
+namespace Catalog.API.Features.Category.GetCategory;
 
-public sealed partial class GetProduct
+public sealed partial class GetCategory
 {
     public sealed class EndPoint : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("/product/{id}", async ([FromRoute] long id, ISender sender) =>
+            app.MapGet("/category/{id}", async ([FromRoute] long id, ISender sender) =>
                 {
                     var resQuery = await sender.Send(new ReqQuery { Id = id });
                     if (resQuery.IsError)
                     {
-                        return Results.BadRequest(resQuery.Errors);
+                        return Results.BadRequest((object)resQuery.Errors);
                     }
 
                     var result = resQuery.Value.Adapt<GetEndPointResponse>();
-                    return Results.Ok(result);
+                    return Results.Ok((object)result);
                 })
-                .WithName("Get Product")
-                .WithTags("Product")
+                .WithName("Get Category")
+                .WithTags("Category")
                 .Produces(StatusCodes.Status200OK, typeof(GetEndPointResponse))
                 .ProducesProblem(StatusCodes.Status400BadRequest)
-                .WithSummary("Get Product For DShop")
-                .WithDescription("For Getting Product Should Use This API!");
+                .WithSummary("Get Category For DShop")
+                .WithDescription("For Getting Category Should Use This API!");
         }
     }
 }
