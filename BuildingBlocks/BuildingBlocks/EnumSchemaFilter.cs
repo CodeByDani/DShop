@@ -1,11 +1,10 @@
-﻿namespace Catalog.API;
-
-using Microsoft.OpenApi.Any;
+﻿using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+
+namespace BuildingBlocks;
 
 public class EnumSchemaFilter : ISchemaFilter
 {

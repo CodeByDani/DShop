@@ -1,3 +1,4 @@
+using BuildingBlocks;
 using BuildingBlocks.DependencyInjection;
 using Scalar.AspNetCore;
 
@@ -11,7 +12,13 @@ namespace Catalog.API
             var builder = WebApplication.CreateBuilder(args);
             builder.AddServiceDefaults();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c => c.SchemaFilter<EnumSchemaFilter>());
+            builder.Services.AddSwaggerGen(c =>
+            {
+                var xmlFile = $"Catalog.API.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.SchemaFilter<EnumSchemaFilter>();
+                c.IncludeXmlComments(xmlPath);
+            });
             builder.Services.AddCarter();
             builder.Services.AddMediatR(cfg =>
                 cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));

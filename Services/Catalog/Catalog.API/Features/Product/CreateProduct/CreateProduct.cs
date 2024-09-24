@@ -5,6 +5,7 @@ public sealed partial class CreateProduct
     public sealed class CreateProductEndPointRequest
     {
         [Required]
+
         public string Name { get; set; }
         [Required]
         public long CategoryId { get; set; }
