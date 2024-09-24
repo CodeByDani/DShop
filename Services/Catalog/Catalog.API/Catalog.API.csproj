@@ -11,6 +11,12 @@
 
 	<PropertyGroup>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>
+			$(NoWarn);CS1591;
+		</NoWarn>
+		<NoError>
+			$(NoError);CS1591;
+		</NoError>
 	</PropertyGroup>
 
   <ItemGroup>
