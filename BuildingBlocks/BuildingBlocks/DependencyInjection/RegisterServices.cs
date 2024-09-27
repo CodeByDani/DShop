@@ -1,4 +1,5 @@
-﻿using Mapster;
+﻿using FluentValidation;
+using Mapster;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BuildingBlocks.DependencyInjection;

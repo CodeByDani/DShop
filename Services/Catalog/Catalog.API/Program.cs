@@ -1,4 +1,5 @@
 using BuildingBlocks;
+using BuildingBlocks.Behavior;
 using BuildingBlocks.DependencyInjection;
 using Scalar.AspNetCore;
 
@@ -8,6 +9,7 @@ namespace Catalog.API
     {
         public static void Main(string[] args)
         {
+            var assembly = typeof(Program).Assembly;
             //todo Builder 
             var builder = WebApplication.CreateBuilder(args);
             builder.AddServiceDefaults();
@@ -19,10 +21,18 @@ namespace Catalog.API
                 c.SchemaFilter<EnumSchemaFilter>();
                 c.IncludeXmlComments(xmlPath);
             });
-            builder.Services.AddCarter();
+
             builder.Services.AddMediatR(cfg =>
-                cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+            {
+                cfg.RegisterServicesFromAssembly(assembly);
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            });
+
             builder.Services.RegisterServices();
+            builder.Services.AddValidatorsFromAssembly(assembly);
+
+            builder.Services.AddCarter();
+
             builder.Services.AddMarten(opt =>
             {
                 opt.Connection(builder.Configuration.GetConnectionString("CatalogDb")!);
