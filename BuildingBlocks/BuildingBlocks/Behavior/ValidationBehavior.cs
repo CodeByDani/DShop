@@ -2,34 +2,43 @@
 using ErrorOr;
 using FluentValidation;
 using MediatR;
+using System.ComponentModel.DataAnnotations;
 
 namespace BuildingBlocks.Behavior;
 
-public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, ErrorOr<TResponse>>
-where TRequest : ICommand<ErrorOr<TResponse>>
+public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : IRequest<TResponse>
+    where TResponse : IErrorOr
 {
-    private readonly IEnumerable<IValidator<TRequest>> _validators;
+    private readonly IValidator<TRequest>? _validator;
 
-    public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
+    public ValidationBehavior(IValidator<TRequest>? validator = null)
     {
-        _validators = validators;
+        _validator = validator;
     }
-    public async Task<ErrorOr<TResponse>> Handle(TRequest request, RequestHandlerDelegate<ErrorOr<TResponse>> next, CancellationToken cancellationToken)
+
+    public async Task<TResponse> Handle(
+        TRequest request,
+        RequestHandlerDelegate<TResponse> next,
+        CancellationToken cancellationToken)
     {
-        var context = new ValidationContext<TRequest>(request);
-        var validationResults = await Task.WhenAll(_validators.Select(
-            v => v.ValidateAsync(context, cancellationToken)));
-        var validationErrors = validationResults
-            .Where(r => r.Errors.Any())
-            .SelectMany(e => e.Errors)
-            .Select(e => $"{e.ErrorCode}: {e.ErrorMessage}")
-            .ToList();
-        if (validationErrors.Any())
+        if (_validator is null)
         {
-            var errorMessages = string.Join("\n", validationErrors);
-            return Error.Validation("ValidationError", errorMessages);
+            return await next();
         }
 
-        return await next();
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        if (validationResult.IsValid)
+        {
+            return await next();
+        }
+
+        var errors = validationResult.Errors
+            .ConvertAll(error => Error.Validation(
+                code: error.PropertyName,
+                description: error.ErrorMessage));
+
+        return (dynamic)errors;
     }
 }

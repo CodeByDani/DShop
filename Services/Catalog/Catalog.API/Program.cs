@@ -22,14 +22,14 @@ namespace Catalog.API
                 c.IncludeXmlComments(xmlPath);
             });
 
+            builder.Services.AddValidatorsFromAssembly(assembly);
             builder.Services.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssembly(assembly);
-                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+                cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
             });
 
             builder.Services.RegisterServices();
-            builder.Services.AddValidatorsFromAssembly(assembly);
 
             builder.Services.AddCarter();
 

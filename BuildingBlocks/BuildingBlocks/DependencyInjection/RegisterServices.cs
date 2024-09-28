@@ -1,5 +1,7 @@
-﻿using FluentValidation;
+﻿using BuildingBlocks.Behavior;
+using FluentValidation;
 using Mapster;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BuildingBlocks.DependencyInjection;
@@ -9,7 +11,6 @@ public static class ServiceCollectionConfigurationHandler
     public static IServiceCollection RegisterServices(this IServiceCollection services)
     {
         var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
         TypeAdapterConfig.GlobalSettings.Scan(assemblies);
 
         services.Scan(selector =>
