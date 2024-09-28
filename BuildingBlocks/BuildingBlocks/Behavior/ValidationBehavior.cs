@@ -10,9 +10,9 @@ public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<
     where TRequest : IRequest<TResponse>
     where TResponse : IErrorOr
 {
-    private readonly IValidator<TRequest>? _validator;
+    private readonly IValidator<TRequest> _validator;
 
-    public ValidationBehavior(IValidator<TRequest>? validator = null)
+    public ValidationBehavior(IValidator<TRequest> validator = null)
     {
         _validator = validator;
     }
@@ -39,6 +39,6 @@ public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<
                 code: error.PropertyName,
                 description: error.ErrorMessage));
 
-        return (dynamic)errors;
+        return errors.ToTResponse<TResponse>();
     }
 }
