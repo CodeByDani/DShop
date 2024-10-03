@@ -1,10 +1,12 @@
-﻿using ErrorOr;
+﻿using BuildingBlocks.Base;
+using BuildingBlocks.Behavior;
+using ErrorOr;
 using MediatR;
 
 namespace BuildingBlocks.CQRS;
 
-public interface IQuery<TResponse> : IRequest<ErrorOr<TResponse>>
-where TResponse : notnull
+public interface IQuery<out TResponse> : IRequest<TResponse>
+where TResponse : ResponseBaseService, new()
 {
 
 }

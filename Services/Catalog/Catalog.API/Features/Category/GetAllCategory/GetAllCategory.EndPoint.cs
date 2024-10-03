@@ -13,11 +13,11 @@ public sealed partial class GetAllCategory
                     var resQuery = await sender.Send(new ReqQuery());
                     if (resQuery.IsError)
                     {
-                        return Results.BadRequest((object)resQuery.Errors);
+                        return Results.BadRequest(resQuery.Errors);
                     }
 
-                    var result = resQuery.Value.Adapt<GetAllCategoryEndPointResponse>();
-                    return Results.Ok((object)result);
+                    var result = resQuery.Adapt<GetAllCategoryEndPointResponse>();
+                    return Results.Ok(result);
                 })
                 .WithName("Get All Category")
                 .WithTags("Category")

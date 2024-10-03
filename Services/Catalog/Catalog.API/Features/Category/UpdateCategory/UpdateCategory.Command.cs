@@ -1,4 +1,6 @@
-﻿namespace Catalog.API.Features.Category.UpdateCategory;
+﻿using BuildingBlocks.Base;
+
+namespace Catalog.API.Features.Category.UpdateCategory;
 
 public sealed partial class UpdateCategory
 {
@@ -9,7 +11,7 @@ public sealed partial class UpdateCategory
         public string Description { get; set; }
     }
 
-    public sealed class ResCommand
+    public sealed class ResCommand : ResponseBaseService
     {
         public long Id { get; set; }
     }

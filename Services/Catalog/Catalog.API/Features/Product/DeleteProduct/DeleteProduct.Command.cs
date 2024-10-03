@@ -1,4 +1,6 @@
-﻿namespace Catalog.API.Features.Product.DeleteProduct;
+﻿using BuildingBlocks.Base;
+
+namespace Catalog.API.Features.Product.DeleteProduct;
 
 public sealed partial class DeleteProduct
 {
@@ -6,7 +8,7 @@ public sealed partial class DeleteProduct
     {
         public long Id { get; set; }
     }
-    public sealed class ResCommand
+    public sealed class ResCommand : ResponseBaseService
     {
     }
 }

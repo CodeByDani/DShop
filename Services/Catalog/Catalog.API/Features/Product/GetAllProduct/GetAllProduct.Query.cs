@@ -1,4 +1,5 @@
-﻿using Catalog.API.Enums;
+﻿using BuildingBlocks.Base;
+using Catalog.API.Enums;
 
 namespace Catalog.API.Features.Product.GetAllProduct;
 
@@ -15,7 +16,7 @@ public sealed partial class GetAllProduct
             set => _pageSize = value <= 0 ? 10 : value;
         }
     }
-    public sealed class ResQuery
+    public sealed class ResQuery : ResponseBaseService
     {
         public IReadOnlyList<GetAllProductsCommandRes> Products { get; set; }
         public int TotalCount { get; set; }

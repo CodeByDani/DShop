@@ -1,4 +1,5 @@
 ﻿using Catalog.API.Common.Interfaces;
+using Marten.Pagination;
 using System.Linq.Expressions;
 
 namespace Catalog.API.Common;

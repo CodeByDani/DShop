@@ -1,4 +1,6 @@
-﻿namespace Catalog.API.Features.Product.GetProduct;
+﻿using BuildingBlocks.Base;
+
+namespace Catalog.API.Features.Product.GetProduct;
 
 public sealed partial class GetProduct
 {
@@ -6,7 +8,7 @@ public sealed partial class GetProduct
     {
         public long Id { get; set; }
     }
-    public sealed class ResQuery
+    public sealed class ResQuery : ResponseBaseService
     {
         public string Name { get; set; }
         public CategoryModelCommandRes Category { get; set; }

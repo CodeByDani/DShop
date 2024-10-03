@@ -5,7 +5,7 @@ namespace Catalog.API.Features.Product.GetProduct;
 
 public sealed partial class GetProduct
 {
-    public sealed class QueryHandler : IQueryHandler<ReqQuery, ResQuery>
+    public sealed class QueryHandler : BaseQueryHandler<ReqQuery, ResQuery>
     {
         private readonly IProductRepository _repository;
 
@@ -14,13 +14,14 @@ public sealed partial class GetProduct
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public async Task<ErrorOr<ResQuery>> Handle(ReqQuery request, CancellationToken cancellationToken)
+        protected override async Task<ResQuery> HandleCore(ReqQuery request, CancellationToken cancellationToken)
         {
             var product = await _repository
                 .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
             if (product == null)
             {
-                return Error.NotFound(nameof(ProductMessages.NotFoundProduct), ProductMessages.NotFoundProduct);
+                return Failure(Error.NotFound(nameof(ProductMessages.NotFoundProduct),
+                    ProductMessages.NotFoundProduct));
             }
 
             return new ResQuery

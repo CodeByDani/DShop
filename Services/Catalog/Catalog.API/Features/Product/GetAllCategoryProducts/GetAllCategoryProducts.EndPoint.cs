@@ -15,11 +15,11 @@ public sealed partial class GetAllCategoryProducts
                     var resQuery = await sender.Send(query);
                     if (resQuery.IsError)
                     {
-                        return Results.BadRequest((object)resQuery.Errors);
+                        return Results.BadRequest(resQuery.Errors);
                     }
 
-                    var result = resQuery.Value.Adapt<GetAllCategoryProductsEndPointResponse>();
-                    return Results.Ok((object)result);
+                    var result = resQuery.Adapt<GetAllCategoryProductsEndPointResponse>();
+                    return Results.Ok(result);
                 })
                 .WithName("Get All Category Products")
                 .WithTags("Product")

@@ -16,10 +16,10 @@ public sealed partial class UpdateCategory
                     var resCommand = await sender.Send(req);
                     if (resCommand.IsError)
                     {
-                        return Results.BadRequest((object)resCommand.Errors);
+                        return Results.BadRequest(resCommand.Errors);
                     }
-                    var res = resCommand.Value.Adapt<UpdateCategoryEndPointResponse>();
-                    return Results.Created($"/category/{res.Id}", (object)res);
+                    var res = resCommand.Adapt<UpdateCategoryEndPointResponse>();
+                    return Results.Created($"/category/{res.Id}", res);
                 })
                 .WithName("Update Category")
                 .WithTags("Category")

@@ -1,6 +1,9 @@
 using BuildingBlocks;
 using BuildingBlocks.Behavior;
 using BuildingBlocks.DependencyInjection;
+using Catalog.API.Features.Category.Common;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Scalar.AspNetCore;
 
 namespace Catalog.API
@@ -12,7 +15,9 @@ namespace Catalog.API
             var assembly = typeof(Program).Assembly;
             //todo Builder 
             var builder = WebApplication.CreateBuilder(args);
-            builder.AddServiceDefaults();
+            //builder.AddServiceDefaults();
+            var databaseConnection = builder.Configuration.GetConnectionString("CatalogDb")!;
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
@@ -28,20 +33,30 @@ namespace Catalog.API
                 cfg.RegisterServicesFromAssembly(assembly);
                 cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
             });
-
             builder.Services.RegisterServices();
+
+            builder.Services.AddHealthChecks()
+                .AddNpgSql(databaseConnection);
 
             builder.Services.AddCarter();
 
             builder.Services.AddMarten(opt =>
             {
-                opt.Connection(builder.Configuration.GetConnectionString("CatalogDb")!);
+                opt.Connection(databaseConnection);
                 opt.Advanced.HiloSequenceDefaults.MaxLo = 1;
-            }).UseLightweightSessions();
+            })
+                .UseLightweightSessions()
+                .InitializeWith<InitialDataCategory>();
+
+
             //todo App
             var app = builder.Build();
             app.MapDefaultEndpoints();
             app.MapCarter();
+            app.UseHealthChecks("/health", new HealthCheckOptions
+            {
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger(options =>

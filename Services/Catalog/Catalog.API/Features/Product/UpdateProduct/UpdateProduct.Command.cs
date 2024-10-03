@@ -1,4 +1,6 @@
-﻿namespace Catalog.API.Features.Product.UpdateProduct;
+﻿using BuildingBlocks.Base;
+
+namespace Catalog.API.Features.Product.UpdateProduct;
 
 public sealed partial class UpdateProduct
 {
@@ -12,7 +14,7 @@ public sealed partial class UpdateProduct
         public string Description { get; set; }
     }
 
-    public sealed class ResCommand
+    public sealed class ResCommand : ResponseBaseService
     {
         public long Id { get; set; }
     }

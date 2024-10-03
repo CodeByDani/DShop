@@ -1,14 +1,13 @@
-﻿using BuildingBlocks.CQRS;
+﻿using BuildingBlocks.Base;
 using ErrorOr;
 using FluentValidation;
 using MediatR;
-using System.ComponentModel.DataAnnotations;
 
 namespace BuildingBlocks.Behavior;
 
-public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public sealed class ValidationBehavior<TRequest, TResponse> : BasePipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
-    where TResponse : IErrorOr
+    where TResponse : ResponseBaseService, new()
 {
     private readonly IValidator<TRequest> _validator;
 
@@ -17,10 +16,7 @@ public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<
         _validator = validator;
     }
 
-    public async Task<TResponse> Handle(
-        TRequest request,
-        RequestHandlerDelegate<TResponse> next,
-        CancellationToken cancellationToken)
+    protected override async Task<TResponse> HandleCore(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
         if (_validator is null)
         {
@@ -39,6 +35,9 @@ public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<
                 code: error.PropertyName,
                 description: error.ErrorMessage));
 
-        return errors.ToTResponse<TResponse>();
+        return new TResponse
+        {
+            Errors = errors
+        };
     }
 }

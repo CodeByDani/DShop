@@ -8,7 +8,7 @@ namespace Catalog.API.Features.Product.GetAllCategoryProducts;
 
 public sealed partial class GetAllCategoryProducts
 {
-    public sealed class QueryHandler : IQueryHandler<ReqQuery, ResQuery>
+    public sealed class QueryHandler : BaseQueryHandler<ReqQuery, ResQuery>
     {
         private readonly IProductRepository _repository;
         private readonly ICategoryRepository _categoryRepository;
@@ -19,13 +19,14 @@ public sealed partial class GetAllCategoryProducts
             _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         }
 
-        public async Task<ErrorOr<ResQuery>> Handle(ReqQuery request, CancellationToken cancellationToken)
+        protected override async Task<ResQuery> HandleCore(ReqQuery request, CancellationToken cancellationToken)
         {
             var category =
                 await _categoryRepository.FirstOrDefaultAsync(p => p.Id == request.CategoryId, cancellationToken);
             if (category == null)
             {
-                return Error.NotFound(nameof(CategoryMessages.NotFoundCategory), CategoryMessages.NotFoundCategory);
+                return Failure(Error.NotFound(nameof(CategoryMessages.NotFoundCategory),
+                    CategoryMessages.NotFoundCategory));
             }
 
             var result = await _repository.FindWithPagination(
@@ -44,7 +45,8 @@ public sealed partial class GetAllCategoryProducts
                 cancellationToken);
             if (result.Item1 == null)
             {
-                return Error.NotFound(nameof(ProductMessages.NotFoundProduct), ProductMessages.NotFoundProduct);
+                return Failure(Error.NotFound(nameof(ProductMessages.NotFoundProduct),
+                    ProductMessages.NotFoundProduct));
             }
 
             var products = result.Item1.Adapt<IReadOnlyList<GetAllCategoryProductsCommandRes>>();

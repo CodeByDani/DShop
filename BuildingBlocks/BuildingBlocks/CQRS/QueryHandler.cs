@@ -5,7 +5,8 @@ using MediatR;
 
 namespace BuildingBlocks.CQRS;
 
-public interface ICommand<out TResponse> : IRequest<TResponse>
+public abstract class BaseQueryHandler<TQuery, TResponse> : BaseRequestHandler<TQuery, TResponse>
+    where TQuery : IQuery<TResponse>
     where TResponse : ResponseBaseService, new()
 {
 

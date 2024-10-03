@@ -16,7 +16,7 @@ public sealed partial class CreateProduct
                     {
                         return Results.BadRequest(resCommand.Errors);
                     }
-                    var res = resCommand.Value.Adapt<CreateProductEndPointResponse>();
+                    var res = resCommand.Adapt<CreateProductEndPointResponse>();
                     return Results.Created($"/product/{res.Id}", res);
                 })
                 .WithName("Create Product")

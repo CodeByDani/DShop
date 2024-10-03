@@ -5,7 +5,7 @@ namespace Catalog.API.Features.Category.CreateCategory;
 
 public sealed partial class CreateCategory
 {
-    public sealed class CommandHandler : ICommandHandler<ReqCommand, ResCommand>
+    public sealed class CommandHandler : BaseCommandHandler<ReqCommand, ResCommand>
     {
         private readonly ICategoryRepository _repository;
 
@@ -14,12 +14,13 @@ public sealed partial class CreateCategory
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public async Task<ErrorOr<ResCommand>> Handle(ReqCommand request, CancellationToken cancellationToken)
+        protected override async Task<ResCommand> HandleCore(ReqCommand request, CancellationToken cancellationToken)
         {
             var category = request.Adapt<Entities.Category>();
             if (category == null)
             {
-                return Error.NotFound(nameof(CategoryMessages.NotFoundCategory), CategoryMessages.NotFoundCategory);
+                return Failure(Error.NotFound(nameof(CategoryMessages.NotFoundCategory),
+                    CategoryMessages.NotFoundCategory));
             }
             await _repository.Store(category, cancellationToken);
 

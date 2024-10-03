@@ -1,4 +1,6 @@
-﻿namespace Catalog.API.Features.Category.DeleteCategory;
+﻿using BuildingBlocks.Base;
+
+namespace Catalog.API.Features.Category.DeleteCategory;
 
 public sealed partial class DeleteCategory
 {
@@ -6,7 +8,7 @@ public sealed partial class DeleteCategory
     {
         public long Id { get; set; }
     }
-    public sealed class ResCommand
+    public sealed class ResCommand : ResponseBaseService
     {
     }
 }

@@ -7,7 +7,7 @@ namespace Catalog.API.Features.Category.GetAllCategory;
 
 public sealed partial class GetAllCategory
 {
-    public sealed class QueryHandler : IQueryHandler<ReqQuery, ResQuery>
+    public sealed class QueryHandler : BaseQueryHandler<ReqQuery, ResQuery>
     {
         private readonly ICategoryRepository _repository;
 
@@ -16,7 +16,7 @@ public sealed partial class GetAllCategory
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public async Task<ErrorOr<ResQuery>> Handle(ReqQuery request, CancellationToken cancellationToken)
+        protected override async Task<ResQuery> HandleCore(ReqQuery request, CancellationToken cancellationToken)
         {
             var categories = await _repository.GetAllCategories();
             var result = categories.Adapt<IReadOnlyList<GetAllCategoriesCommandRes>>();

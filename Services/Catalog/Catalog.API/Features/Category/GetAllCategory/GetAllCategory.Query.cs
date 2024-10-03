@@ -1,4 +1,5 @@
-﻿using Catalog.API.Enums;
+﻿using BuildingBlocks.Base;
+using Catalog.API.Enums;
 
 namespace Catalog.API.Features.Category.GetAllCategory;
 
@@ -7,7 +8,8 @@ public sealed partial class GetAllCategory
     public sealed class ReqQuery : IQuery<ResQuery>
     {
     }
-    public sealed class ResQuery
+
+    public sealed class ResQuery : ResponseBaseService
     {
         public IReadOnlyList<GetAllCategoriesCommandRes> Categories { get; set; }
         public int TotalCount { get; set; }

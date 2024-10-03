@@ -14,10 +14,10 @@ public sealed partial class CreateCategory
                     var resCommand = await sender.Send(req);
                     if (resCommand.IsError)
                     {
-                        return Results.BadRequest((object)resCommand.Errors);
+                        return Results.BadRequest(resCommand.Errors);
                     }
-                    var res = resCommand.Value.Adapt<CreateCategoryEndPointResponse>();
-                    return Results.Created($"/category/{res.Id}", (object)res);
+                    var res = resCommand.Adapt<CreateCategoryEndPointResponse>();
+                    return Results.Created($"/category/{res.Id}", res);
                 })
                 .WithName("Create Category")
                 .WithTags("Category")

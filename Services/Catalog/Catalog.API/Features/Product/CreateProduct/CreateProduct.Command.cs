@@ -1,4 +1,7 @@
-﻿namespace Catalog.API.Features.Product.CreateProduct;
+﻿using BuildingBlocks.Base;
+using BuildingBlocks.Behavior;
+
+namespace Catalog.API.Features.Product.CreateProduct;
 
 public sealed partial class CreateProduct
 {
@@ -11,7 +14,7 @@ public sealed partial class CreateProduct
         public string Description { get; set; }
     }
 
-    public sealed class ResCommand
+    public sealed class ResCommand : ResponseBaseService
     {
         public long Id { get; set; }
     }

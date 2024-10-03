@@ -6,7 +6,7 @@ namespace Catalog.API.Features.Category.UpdateCategory;
 
 public sealed partial class UpdateCategory
 {
-    public sealed class CommandHandler : ICommandHandler<ReqCommand, ResCommand>
+    public sealed class CommandHandler : BaseCommandHandler<ReqCommand, ResCommand>
     {
         private readonly ICategoryRepository _repository;
 
@@ -15,13 +15,14 @@ public sealed partial class UpdateCategory
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public async Task<ErrorOr<ResCommand>> Handle(ReqCommand request, CancellationToken cancellationToken)
+        protected override async Task<ResCommand> HandleCore(ReqCommand request, CancellationToken cancellationToken)
         {
             var category = await _repository
                 .FirstOrDefaultAsync(p => p.Id == request.CategoryId, cancellationToken);
             if (category == null)
             {
-                return Error.NotFound(nameof(CategoryMessages.NotFoundCategory), CategoryMessages.NotFoundCategory);
+                return Failure(Error.NotFound(nameof(CategoryMessages.NotFoundCategory),
+                    CategoryMessages.NotFoundCategory));
             }
 
             category = request.Adapt(category);

@@ -15,7 +15,7 @@ public sealed partial class DeleteCategory
                     var resCommand = await sender.Send(new ReqCommand { Id = id });
                     if (resCommand.IsError)
                     {
-                        return Results.BadRequest((object)resCommand.Errors);
+                        return Results.BadRequest(resCommand.Errors);
                     }
                     return Results.NoContent();
                 })
