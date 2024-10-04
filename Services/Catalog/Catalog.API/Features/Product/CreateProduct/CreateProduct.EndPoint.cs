@@ -1,4 +1,5 @@
-﻿using Results = Microsoft.AspNetCore.Http.Results;
+﻿using BuildingBlocks;
+using Results = Microsoft.AspNetCore.Http.Results;
 
 namespace Catalog.API.Features.Product.CreateProduct;
 
@@ -14,7 +15,7 @@ public sealed partial class CreateProduct
                     var resCommand = await sender.Send(req);
                     if (resCommand.IsError)
                     {
-                        return Results.BadRequest(resCommand.Errors);
+                        return resCommand.ToHttpError();
                     }
                     var res = resCommand.Adapt<CreateProductEndPointResponse>();
                     return Results.Created($"/product/{res.Id}", res);
