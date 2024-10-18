@@ -1,9 +1,10 @@
-﻿using Basket.API.Common.Interfaces;
+﻿using Basket.API.Common;
+using Basket.API.Data.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq.Expressions;
 
-namespace Basket.API.Common;
+namespace Basket.API.Data;
 
 public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
 {

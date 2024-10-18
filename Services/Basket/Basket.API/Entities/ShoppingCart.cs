@@ -1,6 +1,8 @@
-﻿namespace Basket.API.Entities;
+﻿using Basket.API.Common;
 
-public class ShoppingCart
+namespace Basket.API.Entities;
+
+public class ShoppingCart : BaseEntity
 {
     public string UserName { get; set; }
     public ICollection<ShoppingCartItem> Items { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
+using Basket.API.Common;
 
-namespace Basket.API.Common.Interfaces;
+namespace Basket.API.Data.Interfaces;
 
 public interface IRepository<TEntity> where TEntity : BaseEntity
 {
