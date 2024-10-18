@@ -24,6 +24,8 @@ var cache = builder.AddRedis("cache", 6379)
 builder.AddProject<Projects.Catalog_API>("catalog-api")
 .WithReference(catalogDb);
 
-builder.AddProject<Projects.Basket_API>("basket-api");
+builder.AddProject<Projects.Basket_API>("basket-api")
+    .WithReference(basketDb)
+    .WithReference(cache);
 
 builder.Build().Run();
