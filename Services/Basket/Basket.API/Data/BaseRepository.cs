@@ -1,5 +1,7 @@
-﻿using Basket.API.Common;
-using Basket.API.Data.Interfaces;
+﻿using Basket.API.Data.Interfaces;
+using Basket.API.DependencyInjection;
+using Basket.API.Entities;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq.Expressions;
@@ -10,10 +12,10 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Base
 {
     private readonly IMongoCollection<TEntity> _mongoCollection;
 
-
-    public BaseRepository(IMongoCollection<TEntity> mongoCollection)
+    public BaseRepository(IMongoClient client, IOptions<MongoDbSettings> settings)
     {
-        _mongoCollection = mongoCollection ?? throw new ArgumentNullException(nameof(mongoCollection));
+        var database = client.GetDatabase(settings.Value.DatabaseName);
+        _mongoCollection = database.GetCollection<TEntity>(nameof(TEntity));
     }
 
     public async Task InsertAsync(TEntity entity, CancellationToken cancellationToken)

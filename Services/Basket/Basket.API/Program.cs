@@ -1,8 +1,13 @@
+using Basket.API.DependencyInjection;
 using BuildingBlocks;
 using BuildingBlocks.Behavior;
 using BuildingBlocks.DependencyInjection;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 using Scalar.AspNetCore;
 
 namespace Basket.API;
@@ -14,9 +19,15 @@ public class Program
         var assembly = typeof(Program).Assembly;
         //todo Builder Basket
         var builder = WebApplication.CreateBuilder(args);
-        var databaseConnection = builder.Configuration.GetConnectionString("Basketdb")!;
 
-        builder.AddMongoDBClient("MongoConnection");
+        builder.Services.Configure<MongoDbSettings>
+            (builder.Configuration.GetSection("MongoDbSettings"));
+        var connection = builder.Configuration.GetConnectionString("MongoConnection");
+        builder.AddMongoDBClient("Basket", settings =>
+        {
+            connection = connection!;
+        });
+
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
         {
@@ -33,6 +44,7 @@ public class Program
             cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
         });
         builder.Services.RegisterServices();
+        builder.Services.AddCarter();
         builder.Services.AddHealthChecks();
 
         //todo App Basket

@@ -1,19 +1,21 @@
 ﻿using Basket.API.Data.Interfaces;
+using Basket.API.DependencyInjection;
 using Basket.API.Entities;
-using MongoDB.Bson;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using System.Threading;
 
 namespace Basket.API.Data;
 
 public class BasketRepository : BaseRepository<ShoppingCart>, IBasketRepository
 {
     private readonly IMongoCollection<ShoppingCart> _collection;
-    public BasketRepository(IMongoCollection<ShoppingCart> mongoCollection) : base(mongoCollection)
+    public BasketRepository(IMongoClient client, IOptions<MongoDbSettings> settings)
+        : base(client, settings)
     {
-        _collection = mongoCollection;
+        _collection = client
+            .GetDatabase(settings.Value.DatabaseName)
+            .GetCollection<ShoppingCart>(nameof(ShoppingCart));
     }
-
     public async Task<ShoppingCart> GetBasketAsync(string username, CancellationToken cancellation)
         => await _collection.Find(p => p.UserName == username)
             .FirstOrDefaultAsync(cancellation);
@@ -36,4 +38,5 @@ public class BasketRepository : BaseRepository<ShoppingCart>, IBasketRepository
             .DeleteOneAsync(p => p.UserName == username, cancellation);
         return result.DeletedCount != 0;
     }
+
 }

@@ -1,5 +1,5 @@
-﻿using System.Linq.Expressions;
-using Basket.API.Common;
+﻿using Basket.API.Entities;
+using System.Linq.Expressions;
 
 namespace Basket.API.Data.Interfaces;
 
