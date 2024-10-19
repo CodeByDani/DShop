@@ -9,13 +9,23 @@ namespace Basket.API.Data;
 public class BasketRepository : BaseRepository<ShoppingCart>, IBasketRepository
 {
     private readonly IMongoCollection<ShoppingCart> _collection;
+
     public BasketRepository(IMongoClient client, IOptions<MongoDbSettings> settings)
         : base(client, settings)
     {
-        _collection = client
-            .GetDatabase(settings.Value.DatabaseName)
-            .GetCollection<ShoppingCart>(nameof(ShoppingCart));
+        _collection = GetCollection();
+        UsernameIndex();
     }
+
+    private void UsernameIndex()
+    {
+        var indexKeysDefinition = Builders<ShoppingCart>
+            .IndexKeys.Ascending(p => p.UserName);
+        var indexOptions = new CreateIndexOptions { Unique = true };
+        var indexModel = new CreateIndexModel<ShoppingCart>(indexKeysDefinition, indexOptions);
+        _collection.Indexes.CreateOne(indexModel);
+    }
+
     public async Task<ShoppingCart> GetBasketAsync(string username, CancellationToken cancellation)
         => await _collection.Find(p => p.UserName == username)
             .FirstOrDefaultAsync(cancellation);

@@ -15,7 +15,12 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Base
     public BaseRepository(IMongoClient client, IOptions<MongoDbSettings> settings)
     {
         var database = client.GetDatabase(settings.Value.DatabaseName);
-        _mongoCollection = database.GetCollection<TEntity>(nameof(TEntity));
+        _mongoCollection = database.GetCollection<TEntity>(typeof(TEntity).Name);
+    }
+
+    protected IMongoCollection<TEntity> GetCollection()
+    {
+        return _mongoCollection;
     }
 
     public async Task InsertAsync(TEntity entity, CancellationToken cancellationToken)

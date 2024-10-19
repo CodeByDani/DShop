@@ -2,12 +2,6 @@ using Basket.API.DependencyInjection;
 using BuildingBlocks;
 using BuildingBlocks.Behavior;
 using BuildingBlocks.DependencyInjection;
-using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using MongoDB.Driver;
 using Scalar.AspNetCore;
 
 namespace Basket.API;
