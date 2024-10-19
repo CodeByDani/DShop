@@ -1,6 +1,13 @@
-﻿namespace Basket.API.Feature.Basket.DeleteBasket;
+﻿using BuildingBlocks.Base;
 
-public class DeleteBasketCommand
+namespace Basket.API.Feature.Basket.DeleteBasket;
+
+public sealed class DeleteBasketReqCommand : ICommand<DeleteBasketResCommand>
+{
+    public string UserName { get; set; }
+}
+
+public sealed class DeleteBasketResCommand : ResponseBaseService
 {
 
 }

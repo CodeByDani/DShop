@@ -6,8 +6,3 @@ public sealed class StoreBasketEndPointReq
 {
     public ShoppingCart Cart { get; set; }
 }
-
-public sealed class StoreBasketEndPointRes
-{
-    public string State { get; set; }
-}

@@ -10,10 +10,10 @@ public class StoreBasketEndPoint : ICarterModule
             {
                 var result = await sender.Send(new StoreBasketReqCommand { Cart = model.Cart });
                 if (result.IsError) return result.ToHttpError();
-                return Results.Ok(result);
+                return Results.Created("", result);
             }).WithName("Store Basket")
             .WithTags("Basket")
-            .Produces(StatusCodes.Status200OK, typeof(StoreBasketEndPointReq))
+            .Produces(StatusCodes.Status201Created, typeof(StoreBasketEndPointReq))
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Store Basket For DShop")
             .WithDescription("For Creating Basket Should Use This API!"); ;

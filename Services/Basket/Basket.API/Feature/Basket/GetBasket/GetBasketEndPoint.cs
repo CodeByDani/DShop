@@ -6,10 +6,12 @@ public sealed class GetBasketEndPointModel : ICarterModule
     {
         app.MapGet("/basket/{username}", async (string username, ISender sender) =>
             {
-                var result = sender.Send(new GetBasketResQuery
+                var result = await sender.Send(new GetBasketReqQuery
                 {
                     UserName = username
                 });
+                if (result.IsError) return Results.NotFound(result.Errors);
+                return Results.Ok(result);
             }).WithName("Get Basket")
             .WithTags("Basket")
             .Produces(StatusCodes.Status200OK, typeof(GetBasketEndPointReq))
