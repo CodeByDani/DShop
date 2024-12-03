@@ -16,9 +16,7 @@ var basketDb = builder.AddMongoDB("mongo", 27017)
     .AddDatabase("Basket");
 
 //redis 
-var cache = builder.AddRedis("cache", 6379)
-    .WithImage("ghcr.io/microsoft/garnet")
-    .WithImageTag("latest");
+var cache = builder.AddGarnet("cache", 6379);
 
 //TODO Projects
 builder.AddProject<Projects.Catalog_API>("catalog-api")
