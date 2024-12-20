@@ -22,6 +22,7 @@ public class Program
         builder.Services.Configure<MongoDbSettings>
             (builder.Configuration.GetSection("MongoDbSettings"));
         var connection = builder.Configuration.GetConnectionString("MongoConnection");
+        var redisConnection = builder.Configuration.GetConnectionString("Redis");
         builder.AddMongoDBClient("Basket", settings =>
         {
             connection = connection!;
@@ -29,7 +30,7 @@ public class Program
 
         builder.Services.AddStackExchangeRedisCache(option =>
         {
-            option.Configuration = builder.Configuration.GetConnectionString("Redis");
+            option.Configuration = redisConnection;
         });
 
         builder.Services.AddEndpointsApiExplorer();
@@ -49,7 +50,9 @@ public class Program
         });
         builder.Services.RegisterServices();
         builder.Services.AddCarter();
-        builder.Services.AddHealthChecks();
+        builder.Services.AddHealthChecks()
+            .AddMongoDb(connection)
+            .AddRedis(redisConnection);
 
         //todo App Basket
         var app = builder.Build();
