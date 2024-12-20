@@ -1,7 +1,12 @@
+using Basket.API.Data;
+using Basket.API.Data.Interfaces;
 using Basket.API.DependencyInjection;
+using Basket.API.Entities;
 using BuildingBlocks;
 using BuildingBlocks.Behavior;
 using BuildingBlocks.DependencyInjection;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Scalar.AspNetCore;
 
 namespace Basket.API;
@@ -22,6 +27,11 @@ public class Program
             connection = connection!;
         });
 
+        builder.Services.AddStackExchangeRedisCache(option =>
+        {
+            option.Configuration = builder.Configuration.GetConnectionString("Redis");
+        });
+
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
         {
@@ -30,7 +40,7 @@ public class Program
             c.SchemaFilter<EnumSchemaFilter>();
             c.IncludeXmlComments(xmlPath);
         });
-
+        builder.Services.Decorate<IBasketRepository,CachedBasketRepository<ShoppingCart>>();
         builder.Services.AddValidatorsFromAssembly(assembly);
         builder.Services.AddMediatR(cfg =>
         {
@@ -45,10 +55,10 @@ public class Program
         var app = builder.Build();
         app.MapDefaultEndpoints();
         app.MapCarter();
-        //app.UseHealthChecks("/health", new HealthCheckOptions
-        //{
-        //    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-        //});
+        app.UseHealthChecks("/health", new HealthCheckOptions
+        {
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger(options =>
