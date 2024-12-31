@@ -1,4 +1,5 @@
 ﻿using Basket.API.Data.Interfaces;
+using Basket.API.Feature.Basket.Common;
 
 namespace Basket.API.Feature.Basket.DeleteBasket;
 
@@ -14,7 +15,7 @@ public class DeleteBasketCommandHandler : BaseCommandHandler<DeleteBasketReqComm
     protected override async Task<DeleteBasketResCommand> HandleCore(DeleteBasketReqCommand request, CancellationToken cancellationToken)
     {
         var result = await _repository.DeleteBasketAsync(request.UserName, cancellationToken);
-        if (!result) return Failure(Error.Failure("error", "error"));
+        if (!result) return Failure(Error.Failure(nameof(BasketMessage.FailedAtDeleteBasket), BasketMessage.FailedAtDeleteBasket));
         return new DeleteBasketResCommand();
     }
 }

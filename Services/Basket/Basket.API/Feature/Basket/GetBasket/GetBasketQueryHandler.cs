@@ -1,5 +1,6 @@
 ﻿using Basket.API.Data.Interfaces;
 using Basket.API.Entities;
+using Basket.API.Feature.Basket.Common;
 
 namespace Basket.API.Feature.Basket.GetBasket;
 
@@ -16,7 +17,7 @@ public class GetBasketQueryHandler : BaseQueryHandler<GetBasketReqQuery, GetBask
         CancellationToken cancellationToken)
     {
         var result = await _repository.GetBasketAsync(request.UserName, cancellationToken);
-        if (result == null) return Failure(Error.NotFound("Error", "Error"));
+        if (result == null) return Failure(Error.NotFound(nameof(BasketMessage.NotFoundBasket), BasketMessage.NotFoundBasket));
         return new GetBasketResQuery
         {
             Cart = result
